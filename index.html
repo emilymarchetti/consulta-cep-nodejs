@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <link href="/css/index.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.11.2/jquery.mask.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
+  </script>
+  <script src="/js/index.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buscar CEP</title>
+</head>
+
+<body>
+  <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12 bg-light">
+    <header
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <span class="fs-4">Buscar CEP</span>
+    </header>
+  </div>
+  <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12" id="form">
+    <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4">
+      <label for="str_cep" class="form-label pt-2 fw-bold">CEP</label>
+      <input class="form-control" id="str_cep" placeholder="00000-000" />
+      <a data-bs-toggle="modal" data-bs-target="#modal_cep" class="link-primary">Não sei o meu CEP</a>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4 col">
+        <label for="str_logradouro" class="form-label pt-2 fw-bold">Logradouro</label>
+        <input class="form-control" id="str_logradouro" disabled="disabled" />
+      </div>
+
+      <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3 col">
+        <label for="str_bairro" class="form-label pt-2 fw-bold">Bairro</label>
+        <input class="form-control" id="str_bairro" disabled="disabled" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4 col">
+        <label for="str_localidade" class="form-label pt-2 fw-bold">Cidade</label>
+        <input class="form-control" id="str_localidade" disabled="disabled" />
+      </div>
+
+      <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1 col">
+        <label for="str_uf" class="form-label pt-2 fw-bold">UF</label>
+        <input class="form-control" id="str_uf" disabled="disabled" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-4 col">
+        <label for="str_ibge" class="form-label pt-2 fw-bold">IBGE</label>
+        <input class="form-control" id="str_ibge" disabled="disabled" />
+      </div>
+
+      <div class="form-group col-xs-1 col-sm-1 col-md-1 col-lg-1 col">
+        <label for="str_ddd" class="form-label pt-2 fw-bold">DDD</label>
+        <input class="form-control" id="str_ddd" disabled="disabled" />
+      </div>
+    </div>
+  </div>
+
+  <!-- loading image  -->
+  <div id='loading' style='display: none;'></div>
+
+  <!-- modal busca cep por endereço -->
+  <div class="modal fade" id="modal_cep" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal_cep">Buscar CEP por Endereço</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3 col">
+              <label for="cmb_uf" class="form-label pt-2 fw-bold">UF*</label>
+              <select id="cmb_uf" class="form-select"></select>
+            </div>
+
+            <div class="form-group col-xs-9 col-sm-9 col-md-9 col-lg-9 col">
+              <label for="cmb_localidade" class="form-label pt-2 fw-bold">Cidade*</label>
+              <select id="cmb_localidade" class="form-select"></select>
+            </div>
+          </div>
+
+          <label for="str_logradouro_search" class="form-label pt-2 fw-bold">Logradouro*</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="str_logradouro_search" />
+            <button type="button" class="btn btn-primary" onclick="searchByEndereco()">Buscar</button>
+          </div>
+
+          <!-- tabela de ceps  -->
+          <table id="table_cep" class="table table-striped table-hover">
+            <thead>
+              <th></th>
+              <th>CEP</th>
+              <th>Logradouro</th>
+              <th>Bairro</th>
+              <th>Complemento</th>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
