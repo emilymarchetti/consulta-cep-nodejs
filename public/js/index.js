@@ -47,15 +47,24 @@ function searchByEndereco() {
 
 function buildTableCeps(response) {
     if ('erro' in response) {
-        alert('Nenhuma UF encontrada');
+        alert('Nenhum CEP encontrado');
+        $table_cep.hide();
         return;
     }
 
     response = response.slice(0, 10); // Mostro apenas os 10 primeiros ceps encontrados
-    var $table_cep_tbody = $('#table_cep tbody');
+    var $table_cep = $('#table_cep');
+    var $table_cep_tbody = $table_cep.find('tbody');
     $table_cep_tbody.empty();
     var itens_html = '';
 
+    if (response.length == 0) {
+        alert('Nenhum CEP encontrado');
+        $table_cep.hide();
+        return;
+    }
+
+    $table_cep.show();
     $.each(response, function (index, item) {
         itens_html += '<tr>' +
             '<td></td>' +

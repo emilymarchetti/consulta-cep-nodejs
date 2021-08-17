@@ -33,8 +33,9 @@ app.get('/getCepByEndereco', function (req, res) {
     var uf = req.query.uf.toLowerCase();
     var localidade = req.query.localidade.toLowerCase();
     var logradouro = req.query.logradouro.toLowerCase();
+    var url = encodeURI('https://viacep.com.br/ws/' + uf + '/' + localidade + '/' + logradouro + '/json/');
 
-    request('https://viacep.com.br/ws/' + uf + '/' + localidade + '/' + logradouro + '/json/', function (error, response, json) {
+    request(url, function (error, response, json) {
         res.send(json);
     });
 });
